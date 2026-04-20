@@ -1,11 +1,3 @@
-import './bootstrap';
-
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
-
-Alpine.start();
-
 import '../css/welcome.css';
 
 const canvas = document.getElementById('bubble-canvas');
