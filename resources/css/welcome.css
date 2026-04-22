@@ -1,0 +1,195 @@
+.bubbles-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.bubble {
+    position: absolute;
+    bottom: -100px;
+    border-radius: 50%;
+    opacity: 0.15;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.2;
+    }
+    90% {
+        opacity: 0.15;
+    }
+    100% {
+        transform: translateY(-110vh) translateX(30px) scale(1.1);
+        opacity: 0;
+    }
+}
+
+#bubble-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+header, main {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── QuizMaster Ticker ── */
+
+.qm-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+    position: relative;
+    z-index: 10;
+}
+
+.qm-window {
+    width: 340px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(160deg, rgba(230,237,245,0.75) 0%, rgba(210,225,240,0.6) 100%);
+    border: 1.5px solid rgba(255,255,255,0.85);
+    box-shadow:
+        0 8px 28px rgba(160,185,210,0.25),
+        0 1.5px 0 rgba(255,255,255,0.9) inset,
+        0 -1px 0 rgba(180,200,220,0.3) inset;
+    backdrop-filter: blur(12px);
+}
+
+.qm-titlebar {
+    background: linear-gradient(180deg, rgba(215,228,242,0.95) 0%, rgba(195,213,232,0.9) 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.75);
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.qm-title-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.qm-icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff 30%, #c8ddf0 100%);
+    border: 1px solid rgba(255,255,255,0.9);
+    flex-shrink: 0;
+}
+
+.qm-title-text {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #5a7a99;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    letter-spacing: 0.03em;
+}
+
+.qm-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.qm-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+    color: rgba(80,100,120,0.7);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.qm-btn-close { background: linear-gradient(135deg, #ffaaaa, #ee8888); }
+.qm-btn-min   { background: linear-gradient(135deg, #ffeea0, #ddcc66); }
+.qm-btn-max   { background: linear-gradient(135deg, #b8e8b8, #88cc88); }
+
+.qm-screen {
+    margin: 8px;
+    border-radius: 8px;
+    height: 40px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(195,212,228,0.7) 0%, rgba(210,223,236,0.6) 100%);
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: inset 0 2px 6px rgba(160,185,210,0.3), 0 1px 0 rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.qm-screen::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 45%;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.qm-ticker-track {
+    display: flex;
+    white-space: nowrap;
+    animation: qm-scroll 20s linear infinite;
+}
+
+.qm-ticker-text {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3d6080;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    letter-spacing: 0.04em;
+    padding-right: 60px;
+}
+
+@keyframes qm-scroll {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.qm-glass-strip {
+    margin: 0 8px 8px;
+    height: 6px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+#bubble-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1; /* above background */
+}
