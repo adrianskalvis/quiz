@@ -1,0 +1,144 @@
+/*
+ * quizes.css
+ * Place in: public/css/quizes.css
+ *
+ * Only contains things Tailwind utility classes can't express cleanly:
+ *   - background image + overlay pseudo-element
+ *   - canvas absolute fill
+ *   - CSS triangle (arrow)
+ *   - custom filter-panel slide transition
+ *   - text-shadow glow
+ */
+
+/* ── Full-screen background ── */
+.screen {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: url('/images/welcomebg.jpg') center / cover no-repeat;
+}
+
+/* Darkening overlay */
+.screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 20, 35, 0.45);
+    z-index: 1;
+}
+
+/* ── Top bar ── */
+.topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: rgba(255, 255, 255, 0.06);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+}
+
+/* ── Nav pills ── */
+.nav-pill {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+    padding: 4px 13px;
+    border-radius: 16px;
+    border: 0.5px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.07);
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    transition: background 0.2s, color 0.2s;
+    display: inline-block;
+}
+.nav-pill:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+.nav-pill--admin {
+    border-color: rgba(255, 200, 80, 0.45);
+    color: rgba(255, 205, 100, 0.9);
+}
+
+/* ── Centre UI container ── */
+.center-ui {
+    position: absolute;
+    top: 52px; left: 0; right: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+/* ── Title glow ── */
+.title-glow {
+    text-shadow: 0 0 50px rgba(140, 210, 255, 0.55);
+}
+
+/* ── Dropdown arrow (CSS triangle) ── */
+.arrow {
+    width: 0; height: 0;
+    border-left:  7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top:   9px solid rgba(255, 255, 255, 0.7);
+    transition: transform 0.3s;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+.arrow.open {
+    transform: rotate(180deg);
+}
+
+/* ── Filter panel slide-down ── */
+.filter-panel {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.38s ease, opacity 0.3s ease;
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 20px;
+}
+.filter-panel.open {
+    max-height: 80px;
+    opacity: 1;
+}
+
+/* ── Filter buttons ── */
+.fbtn {
+    padding: 5px 14px;
+    border-radius: 16px;
+    font-size: 11px;
+    cursor: pointer;
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.07);
+    transition: background 0.2s, color 0.2s;
+    user-select: none;
+    font-family: inherit;
+}
+.fbtn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+}
+.fbtn.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Bubble canvas ── */
+#bubbleCanvas {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    touch-action: none;
+}
