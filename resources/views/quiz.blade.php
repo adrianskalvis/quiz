@@ -310,6 +310,12 @@
             </div>
         </div>
 
+        {{-- Nav dots --}}
+        <div class="nav-dots" id="navDots">
+            @foreach($questions as $i => $q)
+                <div class="dot {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i }}"></div>
+            @endforeach
+        </div>
 
         {{-- Form --}}
         <form method="POST" action="{{ route('quiz.submit', $topic->slug) }}" id="quizForm">
