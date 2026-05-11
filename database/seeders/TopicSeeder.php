@@ -13,7 +13,7 @@ class TopicSeeder extends Seeder
     public function run(): void
     {
         $topics = [
-            ['name' => 'Science',     'slug' => 'science',     'icon' => '🔬', 'color' => '#534AB7'],
+            ['name' => 'HTML',     'slug' => 'html',     'icon' => '🔬', 'color' => '#534AB7'],
             ['name' => 'History',     'slug' => 'history',     'icon' => '📜', 'color' => '#185FA5'],
             ['name' => 'Technology',  'slug' => 'technology',  'icon' => '💻', 'color' => '#1D9E75'],
             ['name' => 'Pop Culture', 'slug' => 'pop-culture', 'icon' => '🎬', 'color' => '#A32D2D'],

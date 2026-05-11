@@ -13,59 +13,57 @@ class QuestionSeeder extends Seeder
     {
         $data = [
 
-            'HTML' => [
-                ['q' => 'What is the chemical symbol for gold?',
-                    'a' => ['Au', 'Ag', 'Fe', 'Pb'], 'c' => 'Au'],
-                ['q' => 'How many bones are in the adult human body?',
-                    'a' => ['206', '198', '214', '220'], 'c' => '206'],
-                ['q' => 'What planet is known as the Red Planet?',
-                    'a' => ['Mars', 'Venus', 'Jupiter', 'Saturn'], 'c' => 'Mars'],
-                ['q' => 'What gas do plants absorb from the atmosphere?',
-                    'a' => ['Carbon dioxide', 'Oxygen', 'Nitrogen', 'Hydrogen'], 'c' => 'Carbon dioxide'],
-                ['q' => 'What is the speed of light in a vacuum (approx)?',
-                    'a' => ['300,000 km/s', '150,000 km/s', '450,000 km/s', '1,000,000 km/s'], 'c' => '300,000 km/s'],
-                ['q' => 'What is the powerhouse of the cell?',
-                    'a' => ['Mitochondria', 'Nucleus', 'Ribosome', 'Golgi apparatus'], 'c' => 'Mitochondria'],
-                ['q' => 'What element has atomic number 1?',
-                    'a' => ['Hydrogen', 'Helium', 'Lithium', 'Carbon'], 'c' => 'Hydrogen'],
-                ['q' => 'What is the boiling point of water at sea level?',
-                    'a' => ['100°C', '90°C', '110°C', '80°C'], 'c' => '100°C'],
-                ['q' => 'Which scientist proposed the theory of general relativity?',
-                    'a' => ['Albert Einstein', 'Isaac Newton', 'Nikola Tesla', 'Galileo Galilei'], 'c' => 'Albert Einstein'],
-                ['q' => 'DNA stands for?',
-                    'a' => ['Deoxyribonucleic acid', 'Diribonucleic acid', 'Deoxyribonitric acid', 'Dinucleic acid'], 'c' => 'Deoxyribonucleic acid'],
+            'html' => [
+                ['q' => 'What does HTML stand for?',
+                    'a' => ['HyperText Markup Language', 'HighText Machine Language', 'HyperText Machine Language', 'HyperTool Markup Language'], 'c' => 'HyperText Markup Language'],
+                ['q' => 'Which tag is used to create a hyperlink in HTML?',
+                    'a' => ['<a>', '<link>', '<href>', '<url>'], 'c' => '<a>'],
+                ['q' => 'Which tag is used for the largest heading in HTML?',
+                    'a' => ['<h1>', '<h6>', '<heading>', '<head>'], 'c' => '<h1>'],
+                ['q' => 'What tag is used to insert an image?',
+                    'a' => ['<img>', '<image>', '<pic>', '<src>'], 'c' => '<img>'],
+                ['q' => 'Which HTML element defines the body of a document?',
+                    'a' => ['<body>', '<main>', '<content>', '<div>'], 'c' => '<body>'],
+                ['q' => 'What attribute specifies the URL of a link?',
+                    'a' => ['href', 'src', 'url', 'link'], 'c' => 'href'],
+                ['q' => 'Which tag creates an unordered list?',
+                    'a' => ['<ul>', '<ol>', '<li>', '<list>'], 'c' => '<ul>'],
+                ['q' => 'What does the <br> tag do?',
+                    'a' => ['Inserts a line break', 'Bolds text', 'Creates a border', 'Breaks a table'], 'c' => 'Inserts a line break'],
+                ['q' => 'Which tag is used to define a table row?',
+                    'a' => ['<tr>', '<td>', '<th>', '<row>'], 'c' => '<tr>'],
+                ['q' => 'What tag wraps the visible content of an HTML page?',
+                    'a' => ['<body>', '<html>', '<main>', '<section>'], 'c' => '<body>'],
             ],
 
-            'Furries' => [
-                ['q' => 'In what year did World War II end?',
-                    'a' => ['1945', '1943', '1947', '1950'], 'c' => '1945'],
+            'history' => [
                 ['q' => 'Who was the first President of the United States?',
                     'a' => ['George Washington', 'Abraham Lincoln', 'Thomas Jefferson', 'John Adams'], 'c' => 'George Washington'],
+                ['q' => 'In which year did World War II end?',
+                    'a' => ['1945', '1943', '1947', '1939'], 'c' => '1945'],
+                ['q' => 'Which ancient wonder was located in Alexandria?',
+                    'a' => ['The Lighthouse', 'The Colossus', 'The Hanging Gardens', 'The Statue of Zeus'], 'c' => 'The Lighthouse'],
+                ['q' => 'Who was the first man to walk on the Moon?',
+                    'a' => ['Neil Armstrong', 'Buzz Aldrin', 'Yuri Gagarin', 'John Glenn'], 'c' => 'Neil Armstrong'],
                 ['q' => 'The Berlin Wall fell in which year?',
-                    'a' => ['1989', '1987', '1991', '1985'], 'c' => '1989'],
+                    'a' => ['1989', '1991', '1985', '1979'], 'c' => '1989'],
                 ['q' => 'Which empire was ruled by Julius Caesar?',
                     'a' => ['Roman Empire', 'Greek Empire', 'Ottoman Empire', 'Byzantine Empire'], 'c' => 'Roman Empire'],
-                ['q' => 'What year did the Titanic sink?',
-                    'a' => ['1912', '1910', '1915', '1920'], 'c' => '1912'],
-                ['q' => 'Who invented the telephone?',
-                    'a' => ['Alexander Graham Bell', 'Thomas Edison', 'Nikola Tesla', 'Guglielmo Marconi'], 'c' => 'Alexander Graham Bell'],
+                ['q' => 'What year did Christopher Columbus reach the Americas?',
+                    'a' => ['1492', '1486', '1501', '1510'], 'c' => '1492'],
                 ['q' => 'The French Revolution began in which year?',
                     'a' => ['1789', '1776', '1804', '1799'], 'c' => '1789'],
-                ['q' => 'Which country was the first to give women the right to vote?',
-                    'a' => ['New Zealand', 'Australia', 'Finland', 'Norway'], 'c' => 'New Zealand'],
-                ['q' => 'Who was known as the "Maid of Orléans"?',
-                    'a' => ['Joan of Arc', 'Marie Curie', 'Cleopatra', 'Eleanor of Aquitaine'], 'c' => 'Joan of Arc'],
-                ['q' => 'In which year did man first land on the Moon?',
-                    'a' => ['1969', '1965', '1972', '1959'], 'c' => '1969'],
+                ['q' => 'Who was the first female Prime Minister of the United Kingdom?',
+                    'a' => ['Margaret Thatcher', 'Theresa May', 'Queen Elizabeth II', 'Liz Truss'], 'c' => 'Margaret Thatcher'],
+                ['q' => 'Which country was the first to grant women the right to vote?',
+                    'a' => ['New Zealand', 'United States', 'United Kingdom', 'Australia'], 'c' => 'New Zealand'],
             ],
 
-            'Gaming' => [
+            'technology' => [
                 ['q' => 'What does CPU stand for?',
                     'a' => ['Central Processing Unit', 'Core Processing Unit', 'Central Program Unit', 'Computer Processing Unit'], 'c' => 'Central Processing Unit'],
                 ['q' => 'Which company created the iPhone?',
                     'a' => ['Apple', 'Samsung', 'Google', 'Microsoft'], 'c' => 'Apple'],
-                ['q' => 'What does HTML stand for?',
-                    'a' => ['HyperText Markup Language', 'HighText Machine Language', 'HyperText Machine Language', 'HyperTool Markup Language'], 'c' => 'HyperText Markup Language'],
                 ['q' => 'What is the most widely used programming language in 2024?',
                     'a' => ['JavaScript', 'Python', 'Java', 'C++'], 'c' => 'JavaScript'],
                 ['q' => 'Who co-founded Microsoft?',
@@ -80,11 +78,11 @@ class QuestionSeeder extends Seeder
                     'a' => ['Google', 'Apple', 'Microsoft', 'Samsung'], 'c' => 'Google'],
                 ['q' => 'What is the binary representation of the number 8?',
                     'a' => ['1000', '1010', '1100', '0111'], 'c' => '1000'],
+                ['q' => 'What does "Wi-Fi" stand for?',
+                    'a' => ['Wireless Fidelity', 'Wireless Frequency', 'Wide Fidelity', 'Wired Fidelity'], 'c' => 'Wireless Fidelity'],
             ],
 
             'pop-culture' => [
-                ['q' => 'Which film won the first Academy Award for Best Picture?',
-                    'a' => ['Wings', 'Casablanca', 'Gone with the Wind', 'Citizen Kane'], 'c' => 'Wings'],
                 ['q' => 'Who played Iron Man in the Marvel Cinematic Universe?',
                     'a' => ['Robert Downey Jr.', 'Chris Evans', 'Chris Hemsworth', 'Mark Ruffalo'], 'c' => 'Robert Downey Jr.'],
                 ['q' => 'Which TV show features the fictional paper company Dunder Mifflin?',
@@ -99,10 +97,12 @@ class QuestionSeeder extends Seeder
                     'a' => ['Christopher Nolan', 'James Cameron', 'Steven Spielberg', 'Ridley Scott'], 'c' => 'Christopher Nolan'],
                 ['q' => 'What color is the dress in the famous 2015 viral internet debate?',
                     'a' => ['Blue and black / White and gold', 'Red and green', 'Yellow and purple', 'Pink and grey'], 'c' => 'Blue and black / White and gold'],
-                ['q' => 'Which band performed at the most Super Bowl halftime shows?',
-                    'a' => ['Bruno Mars', 'Beyoncé', 'Madonna', 'Prince'], 'c' => 'Bruno Mars'],
                 ['q' => 'What streaming service produced "Stranger Things"?',
                     'a' => ['Netflix', 'HBO', 'Amazon Prime', 'Disney+'], 'c' => 'Netflix'],
+                ['q' => 'Which movie features the quote "I\'ll be back"?',
+                    'a' => ['The Terminator', 'RoboCop', 'Predator', 'Die Hard'], 'c' => 'The Terminator'],
+                ['q' => 'What is the name of the lion in "The Lion King"?',
+                    'a' => ['Simba', 'Mufasa', 'Nala', 'Scar'], 'c' => 'Simba'],
             ],
 
             'music' => [
@@ -116,8 +116,6 @@ class QuestionSeeder extends Seeder
                     'a' => ['Beats Per Minute', 'Bass Per Measure', 'Beats Per Measure', 'Bass Per Minute'], 'c' => 'Beats Per Minute'],
                 ['q' => 'Which country does the musical genre "Reggae" originate from?',
                     'a' => ['Jamaica', 'Brazil', 'Cuba', 'Trinidad'], 'c' => 'Jamaica'],
-                ['q' => 'What instrument does a luthier make or repair?',
-                    'a' => ['String instruments', 'Wind instruments', 'Percussion instruments', 'Keyboard instruments'], 'c' => 'String instruments'],
                 ['q' => 'Who wrote the opera "The Magic Flute"?',
                     'a' => ['Mozart', 'Beethoven', 'Bach', 'Handel'], 'c' => 'Mozart'],
                 ['q' => 'What is the highest female singing voice called?',
@@ -126,6 +124,8 @@ class QuestionSeeder extends Seeder
                     'a' => ['Beyoncé', 'Georg Solti', 'Quincy Jones', 'Taylor Swift'], 'c' => 'Beyoncé'],
                 ['q' => 'What does the musical term "forte" mean?',
                     'a' => ['Loud', 'Soft', 'Fast', 'Slow'], 'c' => 'Loud'],
+                ['q' => 'Which band is "Bohemian Rhapsody" by?',
+                    'a' => ['Queen', 'The Beatles', 'Led Zeppelin', 'David Bowie'], 'c' => 'Queen'],
             ],
 
             'laravel' => [
@@ -160,7 +160,7 @@ class QuestionSeeder extends Seeder
                     'a' => ['echo', 'print_text', 'output', 'display'], 'c' => 'echo'],
                 ['q' => 'Which of these is the correct way to start a PHP block?',
                     'a' => ['<?php', '<php>', '<?', '<script php>'], 'c' => '<?php'],
-                ['q' => 'What does the "=== " operator check in PHP?',
+                ['q' => 'What does the "===" operator check in PHP?',
                     'a' => ['Value and type equality', 'Value equality only', 'Type equality only', 'Reference equality'], 'c' => 'Value and type equality'],
                 ['q' => 'Which function returns the length of a string in PHP?',
                     'a' => ['strlen()', 'length()', 'strcount()', 'count()'], 'c' => 'strlen()'],
@@ -181,7 +181,9 @@ class QuestionSeeder extends Seeder
             if (!$topic) continue;
 
             // Clear existing
-            $topic->questions()->each(fn($q) => $q->answers()->delete());
+            Answer::whereHas('question', function($query) use ($topic) {
+                $query->where('topic_id', $topic->id);
+            })->delete();
             $topic->questions()->delete();
 
             foreach ($questions as $item) {

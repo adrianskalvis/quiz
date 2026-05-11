@@ -26,7 +26,6 @@
         const startY = TOP_OFFSET + (canvas.height - TOP_OFFSET) * 0.1;
         const baseR  = Math.min(cellW, cellH) * 0.38 * 1.45;
 
-        // Each bubble gets a unique size variation ±18%
         const sizeVariants = [1.0, 0.82, 1.18, 0.9, 1.12, 0.85, 1.08, 0.95, 1.15, 0.88];
 
         return TOPICS.map((t, i) => {
@@ -38,14 +37,13 @@
                 x:        startX + cellW * col + cellW / 2 + (Math.random() - .5) * (cellW * 0.22),
                 y:        startY + cellH * row + cellH / 2 + (Math.random() - .5) * (cellH * 0.22),
                 r:        baseR * sizeVariants[i % sizeVariants.length],
-                // Each bubble has its own independent float speed and drift
                 vx:       (Math.random() - .5) * 0.45,
                 vy:       (Math.random() - .5) * 0.45,
                 phase:    Math.random() * Math.PI * 2,
-                floatY:   Math.random() * Math.PI * 2, // start at random point in float cycle
-                floatSpd: 0.008 + Math.random() * 0.009, // different float speeds per bubble
-                floatAmp: 0.25 + Math.random() * 0.35,   // different float amplitudes
-                driftX:   (Math.random() - .5) * 0.12,   // slow independent horizontal drift
+                floatY:   Math.random() * Math.PI * 2,
+                floatSpd: 0.008 + Math.random() * 0.009,
+                floatAmp: 0.25 + Math.random() * 0.35,
+                driftX:   (Math.random() - .5) * 0.12,
                 driftY:   (Math.random() - .5) * 0.08,
                 visible:  true,
                 scaleX:   1,
@@ -190,22 +188,35 @@
         ctx.lineWidth   = 1.2;
         ctx.stroke();
 
+        // ── Icon ──
         ctx.font         = `${r * .5}px serif`;
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'middle';
         ctx.globalAlpha  = .88;
+        ctx.shadowColor  = 'rgba(0,0,0,0.75)';
+        ctx.shadowBlur   = 8;
         ctx.fillStyle    = 'white';
         ctx.fillText(b.icon, 0, -r * .06);
         ctx.globalAlpha  = 1;
 
-        ctx.font         = `500 ${Math.max(9, r * .19)}px sans-serif`;
-        ctx.fillStyle    = 'rgba(255,255,255,0.92)';
+        // ── Label ──
+        ctx.font         = `600 ${Math.max(9, r * .19)}px sans-serif`;
+        ctx.shadowColor  = 'rgba(0,0,0,0.85)';
+        ctx.shadowBlur   = 10;
+        ctx.fillStyle    = 'rgba(255,255,255,0.98)';
         ctx.textBaseline = 'top';
         ctx.fillText(b.label, 0, r * .28);
 
-        ctx.font      = `${Math.max(8, r * .15)}px sans-serif`;
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
+        // ── Question count ──
+        ctx.font         = `${Math.max(8, r * .15)}px sans-serif`;
+        ctx.shadowColor  = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur   = 8;
+        ctx.fillStyle    = 'rgba(255,255,255,0.75)';
         ctx.fillText(b.qs + ' Qs', 0, r * .28 + r * .22);
+
+        // Reset shadow so it doesn't bleed into other canvas draws
+        ctx.shadowColor  = 'transparent';
+        ctx.shadowBlur   = 0;
 
         ctx.restore();
     }
@@ -220,7 +231,6 @@
             if (!b.visible) return;
 
             if (!b.dragging) {
-                // Independent float per bubble using its own speed + amplitude
                 b.floatY += b.floatSpd;
                 b.x += b.vx + b.driftX + Math.sin(b.floatY * 0.6 + b.phase) * 0.08;
                 b.y += b.vy + b.driftY + Math.sin(b.floatY       + b.phase) * b.floatAmp;
@@ -234,7 +244,6 @@
                 b.vx *= 0.97;
                 b.vy *= 0.97;
 
-                // Slowly decay drift so they settle
                 b.driftX *= 0.999;
                 b.driftY *= 0.999;
 
