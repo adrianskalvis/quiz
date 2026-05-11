@@ -249,7 +249,7 @@
         <!-- Right: nav -->
         <nav class="nav">
             @if(Auth::user()->is_admin ?? false)
-                <a href="{{ route('admin.dashboard') }}" class="aero-btn" style="
+                <a href="{{ route('admin.index') }}" class="aero-btn" style="
                     background:
                         linear-gradient(180deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.12) 48%,rgba(255,200,60,0.3) 50%,rgba(220,160,0,0.55) 100%),
                         linear-gradient(180deg,rgba(255,200,80,0.75) 0%,rgba(200,140,0,0.9) 100%);
