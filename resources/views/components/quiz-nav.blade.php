@@ -122,5 +122,14 @@
                 Log out
             </button>
         </form>
+
+        @if(Auth::user()->isAdmin())
+            <a href="{{ route('admin.index') }}" style="color:rgba(255,205,100,0.9);font-size:12px;padding:4px 13px;border-radius:16px;border:0.5px solid rgba(255,200,80,0.35);background:rgba(255,200,60,0.08);text-decoration:none;transition:all .2s;"
+               onmouseover="this.style.background='rgba(255,200,60,0.16)';this.style.color='#ffd060'"
+               onmouseout="this.style.background='rgba(255,200,60,0.08)';this.style.color='rgba(255,205,100,0.9)'">
+                Admin panel
+            </a>
+        @endif
+
     </nav>
 </header>
