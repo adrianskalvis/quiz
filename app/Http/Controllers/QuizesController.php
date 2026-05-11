@@ -30,6 +30,12 @@ class QuizesController extends Controller
     public function leaderboard()
     {
         $scores = QuizAttempt::with(['user', 'topic'])
+            ->select('user_id', 'topic_id',
+                \DB::raw('MAX(score) as score'),
+                \DB::raw('MAX(total_questions) as total_questions'),
+                \DB::raw('MIN(created_at) as created_at')
+            )
+            ->groupBy('user_id', 'topic_id')
             ->orderByDesc('score')
             ->orderBy('created_at')
             ->take(50)

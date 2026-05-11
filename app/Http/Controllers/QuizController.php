@@ -11,13 +11,11 @@ class QuizController extends Controller
 {
     public function show(Topic $topic)
     {
-        // Randomize question order, eager load answers
         $questions = $topic->questions()
             ->with('answers')
             ->get()
             ->shuffle()
             ->map(function ($q) {
-                // Randomize answer order too
                 $q->answers = $q->answers->shuffle()->values();
                 return $q;
             })
@@ -46,20 +44,25 @@ class QuizController extends Controller
             'total_questions' => $questions->count(),
         ]);
 
-        return redirect()->route('quiz.result', [
-            'topic' => $topic->slug,
-            'score' => $score,
-            'total' => $questions->count(),
-        ]);
+        return redirect()->route('quiz.result', ['topic' => $topic->slug])
+            ->with('score', $score)
+            ->with('total', $questions->count());
     }
 
-    public function result(Request $request, Topic $topic)
+    public function result(Topic $topic)
     {
-        return view('quiz-result', [
-            'topic' => $topic,
-            'score' => $request->query('score', 0),
-            'total' => $request->query('total', 0),
-        ]);
-    }
+        $score      = (int) session('score', 0);
+        $total      = (int) session('total', 0);
+        $percentage = $total > 0 ? round(($score / $total) * 100) : 0;
 
+        $message = match(true) {
+            $percentage >= 90 => 'Outstanding! You\'re a master!',
+            $percentage >= 70 => 'Great job! Well done!',
+            $percentage >= 50 => 'Not bad! Keep practicing!',
+            $percentage >= 30 => 'Room to improve — try again!',
+            default           => 'Don\'t give up, try again!',
+        };
+
+        return view('quiz-result', compact('topic', 'score', 'total', 'percentage', 'message'));
+    }
 }
