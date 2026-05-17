@@ -1,0 +1,429 @@
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: sans-serif;
+            min-height: 100vh;
+            background: url('/images/welcomebg.jpg') center/cover no-repeat fixed;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 60px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(0,10,20,0.16);
+            border: 0.5px solid rgba(255,255,255,0.15);
+            border-radius: 24px;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.16);
+        }
+
+        .card::before {
+            content: '';
+            display: block;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(180,255,240,0.4), rgba(120,200,255,0.3), transparent);
+        }
+
+        /* HEADER (Frutiger Aero glass sheen) */
+        .card-header {
+            padding: 28px 32px 20px;
+            border-bottom: 0.5px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, rgba(80,200,255,0.10), rgba(80,255,200,0.06));
+        }
+
+        .header-icon {
+            filter: drop-shadow(0 0 14px rgba(120,220,255,0.35));
+        }
+
+        .card-header h1 {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+            text-shadow: 0 0 30px rgba(120,220,255,0.35);
+        }
+
+        .card-header p {
+            color: rgba(255,255,255,0.45);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* PODIUM */
+        .podium {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 12px;
+            padding: 28px 32px 20px;
+            border-bottom: 0.5px solid rgba(255,255,255,0.08);
+        }
+
+        .podium-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .podium-avatar {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #fff;
+            font-size: 14px;
+            border: 2px solid rgba(255,255,255,0.25);
+            box-shadow:
+                0 6px 18px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.25);
+            background: radial-gradient(circle at 35% 30%, rgba(180,255,255,0.9), rgba(60,140,200,0.6));
+        }
+
+        .podium-name {
+            color: rgba(255,255,255,0.88);
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .podium-score {
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+        }
+
+        .podium-block {
+            border-radius: 10px 10px 0 0;
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Frutiger Aero platform sheen */
+        .podium-block::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent);
+            pointer-events: none;
+        }
+
+        /* 1st (gold-tinted aero glass) */
+        .podium-1 .podium-avatar {
+            width: 56px; height: 56px; font-size: 16px;
+            background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95), rgba(170,240,255,0.65) 40%, rgba(255,210,120,0.55));
+            border-color: rgba(255,220,140,0.55);
+            box-shadow: 0 0 18px rgba(255,210,120,0.25), inset 0 1px 0 rgba(255,255,255,0.5);
+        }
+
+        .podium-1 .podium-block {
+            height: 80px;
+            background: linear-gradient(180deg, rgba(255,215,140,0.25), rgba(80,180,220,0.12));
+            border: 0.5px solid rgba(255,220,140,0.35);
+        }
+
+        /* 2nd (silver-blue aero) */
+        .podium-2 .podium-avatar {
+            width: 46px; height: 46px;
+            background: radial-gradient(circle at 35% 30%, rgba(240,250,255,0.9), rgba(140,200,255,0.55));
+            border-color: rgba(180,220,255,0.4);
+        }
+
+        .podium-2 .podium-block {
+            height: 56px;
+            background: linear-gradient(180deg, rgba(140,210,255,0.18), rgba(80,160,200,0.10));
+            border: 0.5px solid rgba(160,220,255,0.2);
+        }
+
+        /* 3rd (green-aqua bronze tint) */
+        .podium-3 .podium-avatar {
+            width: 40px; height: 40px; font-size: 12px;
+            background: radial-gradient(circle at 35% 30%, rgba(220,255,240,0.9), rgba(80,200,160,0.5));
+            border-color: rgba(120,220,180,0.35);
+        }
+
+        .podium-3 .podium-block {
+            height: 40px;
+            background: linear-gradient(180deg, rgba(120,220,180,0.18), rgba(60,160,140,0.10));
+            border: 0.5px solid rgba(120,220,180,0.18);
+        }
+
+        /* TABLE */
+        .lb-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .lb-table thead tr {
+            border-bottom: 0.5px solid rgba(255,255,255,0.08);
+        }
+
+        .lb-table thead th {
+            color: rgba(255,255,255,0.35);
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 12px 20px;
+            text-align: left;
+        }
+
+        .lb-table thead th:last-child { text-align: right; }
+
+        .lb-table tbody tr {
+            border-bottom: 0.5px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+        }
+
+        .lb-table tbody tr:hover {
+            background: rgba(120,220,255,0.06);
+        }
+
+        .lb-table tbody tr.is-me {
+            background: rgba(120,220,255,0.10);
+        }
+
+        .lb-table tbody td {
+            padding: 13px 20px;
+            color: rgba(255,255,255,0.75);
+            font-size: 13px;
+        }
+
+        .lb-table tbody td:last-child { text-align: right; }
+
+        .rank-cell {
+            color: rgba(255,255,255,0.35);
+            font-size: 12px;
+            width: 40px;
+        }
+
+        /* Frutiger Aero medals */
+        .medal {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-initial {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, rgba(180,255,255,0.9), rgba(80,160,255,0.35));
+            border: 0.5px solid rgba(120,200,255,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(220,245,255,0.95);
+            flex-shrink: 0;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .me-badge {
+            font-size: 10px;
+            background: rgba(120,220,255,0.15);
+            color: rgba(180,240,255,0.85);
+            border: 0.5px solid rgba(120,220,255,0.25);
+            border-radius: 8px;
+            padding: 1px 7px;
+            margin-left: 4px;
+        }
+
+        .topic-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.06);
+            border: 0.5px solid rgba(255,255,255,0.10);
+            color: rgba(255,255,255,0.55);
+        }
+
+        .topic-pill-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 0.5px solid rgba(255,255,255,0.18);
+        }
+
+        .score-cell {
+            font-weight: 500;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .mini-bar-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .mini-bar {
+            width: 60px;
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .mini-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, rgba(120,220,255,0.8), rgba(120,255,200,0.9));
+        }
+
+        .empty {
+            padding: 48px 32px;
+            text-align: center;
+            color: rgba(255,255,255,0.35);
+            font-size: 14px;
+        }
+
+        /* bottom fade for readability */
+        .page::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 180px;
+            pointer-events: none;
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.55),
+                rgba(0,0,0,0.25),
+                transparent
+            );
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+        }
+
+        /* subtle bottom readability fade inside card only */
+        .card::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 220px;
+            pointer-events: none;
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.35),
+                rgba(0,0,0,0.15),
+                transparent
+            );
+            z-index: 0;
+        }
+
+        /* ensure content stays above fade */
+        .card-header,
+        .podium,
+        .lb-table,
+        .empty {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                background-attachment: scroll;
+            }
+
+            .page {
+                padding: 84px 10px 34px;
+            }
+
+            .card {
+                border-radius: 16px;
+            }
+
+            .card-header {
+                padding: 18px 16px 14px;
+                gap: 10px;
+            }
+
+            .card-header h1 {
+                font-size: 20px;
+            }
+
+            .header-icon img {
+                width: 42px;
+                height: 42px;
+            }
+
+            .podium {
+                gap: 6px;
+                padding: 22px 10px 18px;
+            }
+
+            .podium-block {
+                width: 66px;
+            }
+
+            .podium-name {
+                max-width: 70px;
+                font-size: 11px;
+            }
+
+            .lb-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                scrollbar-width: thin;
+            }
+
+            .lb-table thead th,
+            .lb-table tbody td {
+                padding: 12px 12px;
+                font-size: 12px;
+            }
+
+            .topic-pill {
+                max-width: 132px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .mini-bar {
+                width: 46px;
+            }
+        }

@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 // Breeze post-login redirect → /quizes
-Route::redirect('/dashboard', '/quizes')->middleware('auth');
+Route::redirect('/dashboard', '/quizes')->middleware('auth')->name('dashboard');
 
 // Profile
 Route::middleware('auth')->group(function () {

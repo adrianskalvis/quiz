@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin — {{ $question ? 'Edit' : 'New' }} Question</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @include('admin.partials.style')
+    @vite(['resources/css/app.css', 'resources/css/pages/admin.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="admin-body">
 <x-quiz-nav />
 <div class="admin-page">
     @include('admin.partials.sidebar')
@@ -21,14 +20,14 @@
             <div class="flash flash-error">{{ $errors->first() }}</div>
         @endif
 
-        <div class="acard" style="max-width:640px">
+        <div class="acard acard-question-form">
             <div class="acard-header">
                 <h2>Question details</h2>
-                <span style="font-size:11px;color:rgba(255,255,255,0.3)">
+                <span class="admin-muted-note">
                     ● Select the correct answer with the radio button
                 </span>
             </div>
-            <div style="padding:20px">
+            <div class="acard-body">
                 <form method="POST"
                       action="{{ $question
                           ? route('admin.questions.update', [$topic, $question])
@@ -57,7 +56,7 @@
                                         <input type="text" name="answers[]" class="form-input answer-input"
                                                value="{{ old('answers.'.$i, $answer->answer_text) }}"
                                                placeholder="Answer option" required>
-                                        <button type="button" class="btn-danger remove-answer" style="padding:5px 9px;flex-shrink:0">✕</button>
+                                        <button type="button" class="btn-danger remove-answer answer-remove-btn">✕</button>
                                     </div>
                                 @endforeach
                             @else
@@ -68,7 +67,7 @@
                                         <input type="text" name="answers[]" class="form-input answer-input"
                                                value="{{ old('answers.'.$i, '') }}"
                                                placeholder="Answer option {{ $i + 1 }}" required>
-                                        <button type="button" class="btn-danger remove-answer" style="padding:5px 9px;flex-shrink:0">✕</button>
+                                        <button type="button" class="btn-danger remove-answer answer-remove-btn">✕</button>
                                     </div>
                                 @endfor
                             @endif
@@ -76,7 +75,7 @@
                         <button type="button" class="add-answer-btn" id="addAnswer">+ Add another answer</button>
                     </div>
 
-                    <div style="display:flex;gap:10px;margin-top:8px">
+                    <div class="form-actions">
                         <button type="submit" class="btn-primary">
                             {{ $question ? 'Save changes' : 'Add question' }}
                         </button>
@@ -87,36 +86,5 @@
         </div>
     </main>
 </div>
-<script>
-    let answerCount = document.querySelectorAll('.answer-row').length;
-
-    document.getElementById('addAnswer').addEventListener('click', () => {
-        const container = document.getElementById('answersContainer');
-        const row = document.createElement('div');
-        row.className = 'answer-row';
-        row.innerHTML = `
-        <input type="radio" name="correct_answer" class="answer-radio" value="${answerCount}">
-        <input type="text" name="answers[]" class="form-input answer-input" placeholder="Answer option" required>
-        <button type="button" class="btn-danger remove-answer" style="padding:5px 9px;flex-shrink:0">✕</button>
-    `;
-        container.appendChild(row);
-        answerCount++;
-        updateValues();
-    });
-
-    document.addEventListener('click', e => {
-        if (e.target.classList.contains('remove-answer')) {
-            if (document.querySelectorAll('.answer-row').length <= 2) return;
-            e.target.closest('.answer-row').remove();
-            updateValues();
-        }
-    });
-
-    function updateValues() {
-        document.querySelectorAll('.answer-row').forEach((row, i) => {
-            row.querySelector('.answer-radio').value = i;
-        });
-    }
-</script>
 </body>
 </html>

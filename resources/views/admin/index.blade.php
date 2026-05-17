@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @include('admin.partials.style')
+    @vite(['resources/css/app.css', 'resources/css/pages/admin.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="admin-body">
 <x-quiz-nav />
 <div class="admin-page">
     @include('admin.partials.sidebar')

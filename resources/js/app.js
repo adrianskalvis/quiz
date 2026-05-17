@@ -1,6 +1,16 @@
-import '../css/welcome.css';
+import '../css/components/quiz-nav.css';
+import '../css/components/side-music-player.css';
+import './welcome-player';
+import './quiz-page';
+import './quiz-result-page';
+import './side-music-player';
+import './admin-questions-form';
+import './admin-topics-form';
+import './progress-bars';
+import './confirm-forms';
 
 const canvas = document.getElementById('bubble-canvas');
+if (canvas) {
 const ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
@@ -105,3 +115,4 @@ function draw() {
 }
 
 draw();
+}

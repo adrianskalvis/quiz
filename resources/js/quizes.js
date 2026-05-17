@@ -4,39 +4,54 @@
 
     const ctx = canvas.getContext('2d');
     const screen = canvas.parentElement;
-    const TOP_OFFSET = 140;
+    const TOPICS = JSON.parse(canvas.dataset.topics || '[]');
+    const HUES   = [200, 30, 165, 90, 330, 50, 280, 15, 260, 120];
+    TOPICS.forEach((t, i) => t.hue = HUES[i % HUES.length]);
+
+    function isPhoneLayout() {
+        return window.matchMedia('(max-width: 720px)').matches;
+    }
+
+    function topOffset() {
+        return isPhoneLayout() ? 16 : 140;
+    }
 
     function resize() {
         canvas.width  = screen.offsetWidth;
-        canvas.height = screen.offsetHeight;
+        if (isPhoneLayout()) {
+            const rows = Math.ceil(TOPICS.length / 3);
+            const rowHeight = Math.max(132, Math.min(154, canvas.width * 0.39));
+            const canvasHeight = topOffset() + rows * rowHeight + 40;
+            canvas.height = Math.max(window.innerHeight - 154, canvasHeight);
+            screen.style.minHeight = '100vh';
+        } else {
+            screen.style.minHeight = '';
+            canvas.height = screen.offsetHeight;
+        }
     }
     resize();
     window.addEventListener('resize', resize);
 
-    const TOPICS = window.QUIZ_TOPICS || [];
-    const HUES   = [200, 30, 165, 90, 330, 50, 280, 15, 260, 120];
-    TOPICS.forEach((t, i) => t.hue = HUES[i % HUES.length]);
-
     function makeBubbles() {
-        const cols   = Math.ceil(Math.sqrt(TOPICS.length + 1));
+        const mobile = isPhoneLayout();
+        const offset = topOffset();
+        const cols   = mobile ? 3 : Math.ceil(Math.sqrt(TOPICS.length + 1));
         const rows   = Math.ceil(TOPICS.length / cols);
-        const cellW  = (canvas.width  * 0.85) / cols;
-        const cellH  = ((canvas.height - TOP_OFFSET) * 0.75) / rows;
-        const startX = canvas.width  * 0.075;
-        const startY = TOP_OFFSET + (canvas.height - TOP_OFFSET) * 0.1;
-        const baseR  = Math.min(cellW, cellH) * 0.38 * 1.45;
-
+        const cellW  = mobile ? canvas.width / cols : (canvas.width * 0.85) / cols;
+        const cellH  = mobile ? Math.max(132, Math.min(154, canvas.width * 0.39)) : ((canvas.height - offset) * 0.75) / rows;
+        const startX = mobile ? 0 : canvas.width * 0.075;
+        const startY = mobile ? offset + 14 : offset + (canvas.height - offset) * 0.1;
+        const baseR  = mobile ? Math.min(52, cellW * 0.40, cellH * 0.40) : Math.min(cellW, cellH) * 0.38 * 1.45;
         const sizeVariants = [1.0, 0.82, 1.18, 0.9, 1.12, 0.85, 1.08, 0.95, 1.15, 0.88];
 
         return TOPICS.map((t, i) => {
-            const col      = i % cols;
-            const row      = Math.floor(i / cols);
-            const sizeMult = sizeVariants[i % sizeVariants.length];
+            const col = i % cols;
+            const row = Math.floor(i / cols);
             return {
                 ...t,
-                x:        startX + cellW * col + cellW / 2 + (Math.random() - .5) * (cellW * 0.22),
-                y:        startY + cellH * row + cellH / 2 + (Math.random() - .5) * (cellH * 0.22),
-                r:        baseR * sizeVariants[i % sizeVariants.length],
+                x:        startX + cellW * col + cellW / 2 + (Math.random() - .5) * (cellW * (mobile ? 0.10 : 0.22)),
+                y:        startY + cellH * row + cellH / 2 + (Math.random() - .5) * (cellH * (mobile ? 0.08 : 0.22)),
+                r:        baseR * (mobile ? Math.min(1.05, sizeVariants[i % sizeVariants.length]) : sizeVariants[i % sizeVariants.length]),
                 vx:       (Math.random() - .5) * 0.45,
                 vy:       (Math.random() - .5) * 0.45,
                 phase:    Math.random() * Math.PI * 2,
@@ -50,16 +65,12 @@
                 scaleY:   1,
                 dents:    [0, 0, 0, 0],
                 dragging: false,
+                _img:     t._img || null,
             };
         });
     }
 
-    let bubbles    = makeBubbles();
-    let dragBubble = null, dragOffX = 0, dragOffY = 0;
-    let lastMX     = 0, lastMY = 0, mouseVX = 0, mouseVY = 0;
-
-    /* ── Collision + dent ── */
-    function resolveCollisions() {
+    function resolveCollisions(bubbles) {
         for (let i = 0; i < bubbles.length; i++) {
             const a = bubbles[i];
             if (!a.visible) continue;
@@ -118,7 +129,6 @@
         b.dents[hi] = Math.max(b.dents[hi], amount * frac);
     }
 
-    /* ── Draw bubble ── */
     function drawBubble(b) {
         ctx.save();
         ctx.translate(b.x, b.y);
@@ -131,26 +141,10 @@
 
         ctx.beginPath();
         ctx.moveTo(0, -r);
-        ctx.bezierCurveTo(
-            r * 0.55,       -r + dt * dp,
-            r - dr * dp,    -r * 0.55,
-            r, 0
-        );
-        ctx.bezierCurveTo(
-            r - dr * dp,    r * 0.55,
-            r * 0.55,       r - db * dp,
-            0, r
-        );
-        ctx.bezierCurveTo(
-            -r * 0.55,       r - db * dp,
-            -(r - dl * dp),  r * 0.55,
-            -r, 0
-        );
-        ctx.bezierCurveTo(
-            -(r - dl * dp),  -r * 0.55,
-            -r * 0.55,       -r + dt * dp,
-            0, -r
-        );
+        ctx.bezierCurveTo( r * 0.55,      -r + dt * dp,   r - dr * dp,   -r * 0.55,  r, 0);
+        ctx.bezierCurveTo( r - dr * dp,    r * 0.55,       r * 0.55,       r - db * dp, 0, r);
+        ctx.bezierCurveTo(-r * 0.55,       r - db * dp,  -(r - dl * dp),   r * 0.55,  -r, 0);
+        ctx.bezierCurveTo(-(r - dl * dp), -r * 0.55,     -r * 0.55,       -r + dt * dp, 0, -r);
         ctx.closePath();
 
         ctx.save();
@@ -188,187 +182,224 @@
         ctx.lineWidth   = 1.2;
         ctx.stroke();
 
-        // ── Icon ──
-        ctx.font         = `${r * .5}px serif`;
-        ctx.textAlign    = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.globalAlpha  = .88;
-        ctx.shadowColor  = 'rgba(0,0,0,0.75)';
-        ctx.shadowBlur   = 8;
-        ctx.fillStyle    = 'white';
-        ctx.fillText(b.icon, 0, -r * .06);
-        ctx.globalAlpha  = 1;
+        // Icon or image
+        if (b._img) {
+            const imgSize = r * 0.9;
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(0, -r * 0.06, r * 0.42, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(b._img, -imgSize * 0.45, -imgSize * 0.45 - r * 0.06, imgSize * 0.9, imgSize * 0.9);
+            ctx.restore();
+        } else {
+            ctx.font         = `${r * .5}px serif`;
+            ctx.textAlign    = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.globalAlpha  = .88;
+            ctx.fillStyle    = 'white';
+            ctx.fillText(b.icon, 0, -r * .06);
+            ctx.globalAlpha  = 1;
+        }
 
-        // ── Label ──
-        ctx.font         = `600 ${Math.max(9, r * .19)}px sans-serif`;
-        ctx.shadowColor  = 'rgba(0,0,0,0.85)';
-        ctx.shadowBlur   = 10;
-        ctx.fillStyle    = 'rgba(255,255,255,0.98)';
+        ctx.font        = `600 ${Math.max(9, r * .19)}px sans-serif`;
+        ctx.textAlign   = 'center';
+        ctx.shadowColor = 'rgba(0,0,0,0.85)';
+        ctx.shadowBlur  = 10;
+        ctx.fillStyle   = 'rgba(255,255,255,0.98)';
         ctx.textBaseline = 'top';
         ctx.fillText(b.label, 0, r * .28);
 
-        // ── Question count ──
-        ctx.font         = `${Math.max(8, r * .15)}px sans-serif`;
-        ctx.shadowColor  = 'rgba(0,0,0,0.8)';
-        ctx.shadowBlur   = 8;
-        ctx.fillStyle    = 'rgba(255,255,255,0.75)';
+        ctx.font        = `${Math.max(8, r * .15)}px sans-serif`;
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur  = 8;
+        ctx.fillStyle   = 'rgba(255,255,255,0.75)';
         ctx.fillText(b.qs + ' Qs', 0, r * .28 + r * .22);
 
-        // Reset shadow so it doesn't bleed into other canvas draws
-        ctx.shadowColor  = 'transparent';
-        ctx.shadowBlur   = 0;
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur  = 0;
 
         ctx.restore();
     }
 
-    /* ── Main loop ── */
-    function tick() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function startApp(bubbles) {
+        let dragBubble = null, dragOffX = 0, dragOffY = 0;
+        let lastMX = 0, lastMY = 0, mouseVX = 0, mouseVY = 0;
 
-        resolveCollisions();
+        function tick() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        bubbles.forEach(b => {
-            if (!b.visible) return;
+            resolveCollisions(bubbles);
 
-            if (!b.dragging) {
-                b.floatY += b.floatSpd;
-                b.x += b.vx + b.driftX + Math.sin(b.floatY * 0.6 + b.phase) * 0.08;
-                b.y += b.vy + b.driftY + Math.sin(b.floatY       + b.phase) * b.floatAmp;
-
-                const mg = b.r + 8;
-                if (b.x < mg)                 { b.x = mg;                 b.vx =  Math.abs(b.vx); }
-                if (b.x > canvas.width - mg)  { b.x = canvas.width - mg;  b.vx = -Math.abs(b.vx); }
-                if (b.y < TOP_OFFSET + mg)    { b.y = TOP_OFFSET + mg;    b.vy =  Math.abs(b.vy); }
-                if (b.y > canvas.height - mg) { b.y = canvas.height - mg; b.vy = -Math.abs(b.vy); }
-
-                b.vx *= 0.97;
-                b.vy *= 0.97;
-
-                b.driftX *= 0.999;
-                b.driftY *= 0.999;
-
-                b.scaleX += (1 - b.scaleX) * .08;
-                b.scaleY += (1 - b.scaleY) * .08;
-            } else {
-                const spd = Math.sqrt(mouseVX * mouseVX + mouseVY * mouseVY);
-                const sq  = Math.min(.28, spd * .012);
-                const ang = Math.atan2(mouseVY, mouseVX);
-                b.scaleX  = 1 + Math.cos(ang) * sq;
-                b.scaleY  = 1 - Math.cos(ang) * sq * .65;
-            }
-
-            b.dents = b.dents.map(d => d * 0.78);
-            drawBubble(b);
-        });
-
-        requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-
-    /* ── Hit test ── */
-    function hit(x, y) {
-        for (let i = bubbles.length - 1; i >= 0; i--) {
-            const b  = bubbles[i];
-            if (!b.visible) continue;
-            const dx = x - b.x, dy = y - b.y;
-            if (Math.sqrt(dx * dx + dy * dy) < b.r) return b;
-        }
-        return null;
-    }
-
-    /* ── Mouse ── */
-    canvas.addEventListener('mousedown', e => {
-        const rect = canvas.getBoundingClientRect();
-        const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-        const b = hit(mx, my);
-        if (b) { dragBubble = b; b.dragging = true; dragOffX = mx - b.x; dragOffY = my - b.y; }
-    });
-
-    canvas.addEventListener('mousemove', e => {
-        const rect = canvas.getBoundingClientRect();
-        const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-        mouseVX = mx - lastMX; mouseVY = my - lastMY;
-        lastMX = mx; lastMY = my;
-        if (dragBubble) { dragBubble.x = mx - dragOffX; dragBubble.y = my - dragOffY; }
-        canvas.style.cursor = dragBubble ? 'grabbing' : (hit(mx, my) ? 'grab' : 'default');
-    });
-
-    canvas.addEventListener('mouseup', () => {
-        if (dragBubble) {
-            dragBubble.vx = mouseVX * .2;
-            dragBubble.vy = mouseVY * .2;
-            dragBubble.dragging = false;
-            dragBubble = null;
-        }
-    });
-
-    canvas.addEventListener('click', e => {
-        if (Math.abs(mouseVX) < 4 && Math.abs(mouseVY) < 4) {
-            const rect = canvas.getBoundingClientRect();
-            const b = hit(e.clientX - rect.left, e.clientY - rect.top);
-            if (b) window.location.href = b.url;
-        }
-    });
-
-    /* ── Touch ── */
-    canvas.addEventListener('touchstart', e => {
-        e.preventDefault();
-        const rect  = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
-        const b = hit(mx, my);
-        if (b) { dragBubble = b; b.dragging = true; dragOffX = mx - b.x; dragOffY = my - b.y; }
-    }, { passive: false });
-
-    canvas.addEventListener('touchmove', e => {
-        e.preventDefault();
-        const rect  = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
-        mouseVX = mx - lastMX; mouseVY = my - lastMY;
-        lastMX = mx; lastMY = my;
-        if (dragBubble) { dragBubble.x = mx - dragOffX; dragBubble.y = my - dragOffY; }
-    }, { passive: false });
-
-    canvas.addEventListener('touchend', e => {
-        e.preventDefault();
-        if (dragBubble) {
-            if (Math.abs(mouseVX) < 4 && Math.abs(mouseVY) < 4) {
-                window.location.href = dragBubble.url;
-            }
-            dragBubble.vx = mouseVX * .2;
-            dragBubble.vy = mouseVY * .2;
-            dragBubble.dragging = false;
-            dragBubble = null;
-        }
-    }, { passive: false });
-
-    /* ── Filter ── */
-    const titleRow    = document.getElementById('titleRow');
-    const arrow       = document.getElementById('arrow');
-    const filterPanel = document.getElementById('filterPanel');
-    let panelOpen     = false;
-
-    if (titleRow) {
-        titleRow.addEventListener('click', () => {
-            panelOpen = !panelOpen;
-            arrow.classList.toggle('open', panelOpen);
-            filterPanel.classList.toggle('open', panelOpen);
-        });
-    }
-
-    document.querySelectorAll('.fbtn').forEach(btn => {
-        btn.addEventListener('click', e => {
-            e.stopPropagation();
-            document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filter = btn.dataset.filter;
             bubbles.forEach(b => {
-                const show = filter === 'all' || b.slug === filter;
-                if (show && !b.visible) { b.scaleX = 0.01; b.scaleY = 0.01; }
-                b.visible = show;
+                if (!b.visible) return;
+
+                if (!b.dragging) {
+                    b.floatY += b.floatSpd;
+                    b.x += b.vx + b.driftX + Math.sin(b.floatY * 0.6 + b.phase) * 0.08;
+                    b.y += b.vy + b.driftY + Math.sin(b.floatY       + b.phase) * b.floatAmp;
+
+                    const mg = b.r + 8;
+                    if (b.x < mg)                 { b.x = mg;                 b.vx =  Math.abs(b.vx); }
+                    if (b.x > canvas.width - mg)  { b.x = canvas.width - mg;  b.vx = -Math.abs(b.vx); }
+                    if (b.y < topOffset() + mg)    { b.y = topOffset() + mg;    b.vy =  Math.abs(b.vy); }
+                    if (b.y > canvas.height - mg) { b.y = canvas.height - mg; b.vy = -Math.abs(b.vy); }
+
+                    b.vx *= 0.97;
+                    b.vy *= 0.97;
+                    b.driftX *= 0.999;
+                    b.driftY *= 0.999;
+
+                    b.scaleX += (1 - b.scaleX) * .08;
+                    b.scaleY += (1 - b.scaleY) * .08;
+                } else {
+                    const spd = Math.sqrt(mouseVX * mouseVX + mouseVY * mouseVY);
+                    const sq  = Math.min(.28, spd * .012);
+                    const ang = Math.atan2(mouseVY, mouseVX);
+                    b.scaleX  = 1 + Math.cos(ang) * sq;
+                    b.scaleY  = 1 - Math.cos(ang) * sq * .65;
+                }
+
+                b.dents = b.dents.map(d => d * 0.78);
+                drawBubble(b);
+            });
+
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+
+        function hit(x, y) {
+            for (let i = bubbles.length - 1; i >= 0; i--) {
+                const b  = bubbles[i];
+                if (!b.visible) continue;
+                const dx = x - b.x, dy = y - b.y;
+                if (Math.sqrt(dx * dx + dy * dy) < b.r) return b;
+            }
+            return null;
+        }
+
+        canvas.addEventListener('mousedown', e => {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+            const b = hit(mx, my);
+            if (b) { dragBubble = b; b.dragging = true; dragOffX = mx - b.x; dragOffY = my - b.y; }
+        });
+
+        canvas.addEventListener('mousemove', e => {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+            mouseVX = mx - lastMX; mouseVY = my - lastMY;
+            lastMX = mx; lastMY = my;
+            if (dragBubble) { dragBubble.x = mx - dragOffX; dragBubble.y = my - dragOffY; }
+            canvas.style.cursor = dragBubble ? 'grabbing' : (hit(mx, my) ? 'grab' : 'default');
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (dragBubble) {
+                dragBubble.vx = mouseVX * .2;
+                dragBubble.vy = mouseVY * .2;
+                dragBubble.dragging = false;
+                dragBubble = null;
+            }
+        });
+
+        canvas.addEventListener('click', e => {
+            if (Math.abs(mouseVX) < 4 && Math.abs(mouseVY) < 4) {
+                const rect = canvas.getBoundingClientRect();
+                const b = hit(e.clientX - rect.left, e.clientY - rect.top);
+                if (b) window.location.href = b.url;
+            }
+        });
+
+        canvas.addEventListener('touchstart', e => {
+            const rect  = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
+            const b = hit(mx, my);
+            if (b) {
+                e.preventDefault();
+                dragBubble = b; b.dragging = true; dragOffX = mx - b.x; dragOffY = my - b.y;
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', e => {
+            if (!dragBubble) return;
+            e.preventDefault();
+            const rect  = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
+            mouseVX = mx - lastMX; mouseVY = my - lastMY;
+            lastMX = mx; lastMY = my;
+            if (dragBubble) { dragBubble.x = mx - dragOffX; dragBubble.y = my - dragOffY; }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', e => {
+            if (dragBubble) {
+                e.preventDefault();
+                if (Math.abs(mouseVX) < 4 && Math.abs(mouseVY) < 4) {
+                    window.location.href = dragBubble.url;
+                }
+                dragBubble.vx = mouseVX * .2;
+                dragBubble.vy = mouseVY * .2;
+                dragBubble.dragging = false;
+                dragBubble = null;
+            }
+        }, { passive: false });
+
+        const titleRow    = document.getElementById('titleRow');
+        const arrow       = document.getElementById('arrow') || document.getElementById('arrowPill');
+        const filterPanel = document.getElementById('filterPanel');
+        let panelOpen     = false;
+
+        if (titleRow && arrow && filterPanel) {
+            titleRow.addEventListener('click', () => {
+                panelOpen = !panelOpen;
+                arrow.classList.toggle('open', panelOpen);
+                filterPanel.classList.toggle('open', panelOpen);
+            });
+        }
+
+        document.querySelectorAll('.fbtn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                bubbles.forEach(b => {
+                    const show = filter === 'all' || b.slug === filter;
+                    if (show && !b.visible) { b.scaleX = 0.01; b.scaleY = 0.01; }
+                    b.visible = show;
+                });
             });
         });
-    });
+    }
+
+    // Preload images then start
+    const imageTopics = TOPICS.filter(t => t.image);
+    const totalImages = imageTopics.length;
+
+    if (totalImages === 0) {
+        startApp(makeBubbles());
+    } else {
+        let loadedCount = 0;
+
+        function onImageSettled() {
+            loadedCount++;
+            if (loadedCount === totalImages) {
+                const bubbles = makeBubbles();
+                bubbles.forEach(b => {
+                    const src = TOPICS.find(t => t.slug === b.slug);
+                    if (src && src._img) b._img = src._img;
+                });
+                startApp(bubbles);
+            }
+        }
+
+        imageTopics.forEach(t => {
+            const img = new Image();
+            img.onload  = () => { t._img = img; onImageSettled(); };
+            img.onerror = () => {               onImageSettled(); };
+            img.src = t.image;
+        });
+    }
 
 })();
